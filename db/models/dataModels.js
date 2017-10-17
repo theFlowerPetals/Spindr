@@ -74,3 +74,12 @@ db.sync()
   .then(() => {
     console.log('User table created')
   })
+
+
+  module.exports = {
+    User, 
+    Image,
+    Chat,
+    Match,
+    Icebreaker
+  }
