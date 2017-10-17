@@ -2,8 +2,8 @@ const express = require('express');
 const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
-// const db = require('../db/db');
-// require('../db/model/dataModel')
+const db = require('../db/db');
+require('../db/models/dataModels')
 // const route = require('../server/router/routes')
 
 const PORT = 3000;
