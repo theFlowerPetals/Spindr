@@ -17,9 +17,6 @@ const User = db.define('User', {
   },
   interests: {
     type: Sequelize.ARRAY(Sequelize.STRING)
-  },
-  img_id: {
-    type: Sequelize.INTEGER
   }
 }, {
   timestamps: false
@@ -46,9 +43,6 @@ const Chat = db.define('Chat', {
 });
 
 const Match = db.define('Match', {
-  user: {
-    type: Sequelize.INTEGER
-  },
   likes: {
     type: Sequelize.ARRAY(Sequelize.INTEGER)
   },
@@ -70,7 +64,11 @@ const Icebreaker = db.define('Icebreaker', {
   timestamps: false
 });
 
+User.hasMany(Image, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
+Image.belongsTo(User, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
 
+User.hasOne(Match, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
+Match.belongsTo(User, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
 
 db.sync()
   .then(() => {
