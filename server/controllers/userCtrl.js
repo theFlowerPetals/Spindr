@@ -14,7 +14,7 @@ module.exports = {
     })
     .catch(err => res.status(404).send(err))
   },
-  //Grab user from database using email
+  //Grab user from db using email
   getUserByEmail: (req, res) => {
     User.findOne({
       where: {
@@ -26,11 +26,11 @@ module.exports = {
     })
     .catch(err => res.status(404).send(err));
   },
-  //Grab user from database using id
+  //Grab user from db using id
   getUserById: (req, res) => {
     User.findOne({
       where: {
-        email: req.params.email
+        email: req.params.id
       }
     })
     .then((user) => {
