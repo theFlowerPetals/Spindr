@@ -24,6 +24,7 @@ const User = db.define('User', {
 
 const Image = db.define('Image', {
   img_urls: {
+    //an array of Large, Medium, and Small images
     type: Sequelize.ARRAY(Sequelize.STRING)
   }
 }, {
