@@ -47,12 +47,10 @@ const Chat = db.define('Chat', {
 const Match = db.define('Match', {
   likes: {
     type: Sequelize.ARRAY(Sequelize.INTEGER),
-    // allowNull: true,
     defaultValue: []
   },
   matches: {
     type: Sequelize.ARRAY(Sequelize.INTEGER),
-    // allowNull: true,
     defaultValue: []
   },
   blocks: {
@@ -83,7 +81,6 @@ db.sync()
   .then(() => {
     console.log('User table created')
   })
-
 
   module.exports = {
     User, 

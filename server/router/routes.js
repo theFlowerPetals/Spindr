@@ -3,6 +3,7 @@ const userCtrl = require('../controllers/userCtrl');
 const icebreakerCtrl = require('../controllers/icebreakerCtrl');
 const imgCtrl = require('../controllers/imgCtrl');
 const matchCtrl = require('../controllers/matchCtrl');
+const chatCtrl = require('../controllers/chatCtrl');
 
 
 //User table routes
@@ -42,6 +43,13 @@ router.route('/addLike/:id')
 router.route('/addBlock/:id')
   .put(matchCtrl.addUserBlock);
 
+
+//Chat table routes
+router.route('/chats')
+  .get(chatCtrl.getChats)
+  .post(chatCtrl.postChats)
+  .delete(chatCtrl.deleteChat);
+  
 
 //Icebreaker table routes
 router.route('/getQuestion')
