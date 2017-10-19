@@ -16,7 +16,8 @@ const User = db.define('User', {
     type: Sequelize.STRING
   },
   interests: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+    type: Sequelize.ARRAY(Sequelize.STRING), 
+    defaultValue: []
   }
 }, {
   timestamps: false
@@ -24,7 +25,8 @@ const User = db.define('User', {
 
 const Image = db.define('Image', {
   img_urls: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    defaultValue: []
   }
 }, {
   timestamps: false
@@ -44,13 +46,16 @@ const Chat = db.define('Chat', {
 
 const Match = db.define('Match', {
   likes: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    defaultValue: []
   },
   matches: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    defaultValue: []
   },
   blocks: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    defaultValue: []
   }
 }, {
   timestamps: false
@@ -70,7 +75,17 @@ Image.belongsTo(User, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
 User.hasOne(Match, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
 Match.belongsTo(User, { foreignKey: { name: 'user_id'}, onDelete: 'CASCADE' })
 
+// db.sync({force: true})
+
 db.sync()
   .then(() => {
     console.log('User table created')
   })
+
+  module.exports = {
+    User, 
+    Image,
+    Chat,
+    Match,
+    Icebreaker
+  }

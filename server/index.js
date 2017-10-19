@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
 require('../db/models/dataModels')
-// const route = require('../server/router/routes')
+const route = require('../server/router/routes')
 
 const PORT = 3000;
 
@@ -12,7 +12,7 @@ const app = express()
 .use(parser.json())
 .use(parser.urlencoded({ extended: true }))
 .use(morgan('dev'))
-// // .use('/api', route)
+.use('/api', route)
 // .use(express.static(path.resolve(__dirname, '../client/static')))
 // .get('/*', function (req, res) {
 //   res.sendFile(path.join(__dirname, '../client/static', 'index.html'));
