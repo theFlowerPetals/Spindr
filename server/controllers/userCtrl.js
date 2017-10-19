@@ -3,7 +3,6 @@ const { User } = require('../../db/models/dataModels');
 module.exports = {
   //Create new user on new account login
   createUser: (req, res) => {
-    console.log("this is user req: ", req.body)
     User.create({
       name: req.body.name,
       email: req.body.email,
@@ -43,14 +42,12 @@ module.exports = {
       }
     })
     .then((user) => {
-      console.log('found user: ', user)
       res.status(200).send(user);
     })
     .catch(err => res.status(404).send(err));
   },
   //add interests
   addInterests: (req, res) => {
-    console.log('this is the req: ', req.body)
     User.findOne({
       where: {
         id: req.params.id
@@ -63,7 +60,6 @@ module.exports = {
       })
     })
       .then((updated) => {
-        console.log('successfully updated', updated);
         res.status(202).send(updated);
       })
       .catch(err => res.status(404).send(err.message))
