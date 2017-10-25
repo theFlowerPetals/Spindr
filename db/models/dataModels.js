@@ -4,6 +4,9 @@ const Sequelize = require('sequelize');
 
 const User = db.define('User', {
   name: {
+    type: Sequelize.STRING 
+  },
+  sex: {
     type: Sequelize.STRING
   },
   email: {
@@ -16,8 +19,24 @@ const User = db.define('User', {
     type: Sequelize.STRING
   },
   interests: {
-    type: Sequelize.ARRAY(Sequelize.STRING), 
-    defaultValue: []
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  social_score: {
+    type: Sequelize.INTEGER,
+    allowNull: true
+  },
+  match_social_score: {
+    type: Sequelize.FLOAT,
+    allowNull: true
+  },
+  match_interests: {
+    type: Sequelize.INTEGER,
+    allowNull: true
+  },
+  match_weighted_interests: {
+    type: Sequelize.JSON,
+    allowNull: true
   }
 }, {
   timestamps: false
