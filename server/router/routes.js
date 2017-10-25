@@ -13,14 +13,17 @@ router.route('/addUser')
 router.route('/getUsers')
   .get(userCtrl.getAllUsers);
 
+router.route('/userId/:id')
+  .get(userCtrl.getUserById);
+
 router.route('/userEmail/:email')
   .get(userCtrl.getUserByEmail);
 
 router.route('/userId/:id')
-  .get(userCtrl.getUserById);
+  .put(userCtrl.updateUserInfo);
 
-router.route('/userId/:id')
-  .put(userCtrl.addInterests);
+router.route('/matchInterests/:id')
+  .put(userCtrl.upateMatchInterests);
 
 
 //Image table routes
