@@ -33,8 +33,7 @@ userX = ['f', 5, ['a', 'b', 'c', 'i', 'l', 'o', 'q', 'r', 'w'], 7, {'a':0.1, 'b'
 
 
 queue = [userA, userB, userC, userD, userE, userF, userG, userH, userI, userJ, userK, userL, userM, userN, userO, userP, userQ, userR, userS, userT, userU, userV, userW, userX]
-
-
+rooms = []
 
 def make_room(queue, room_size):
   # pick a random person from queue
@@ -44,7 +43,9 @@ def make_room(queue, room_size):
   del queue[random_queue_idx]
   
   # put people in the room
-  return add_person(queue, room, room_size, room[len(room) - 1])
+  room_made = add_person(queue, room, room_size, room[len(room) - 1])
+
+  rooms.append(room_made)
 
 #for one male:
 def add_person(queue, room, room_size, user):
@@ -136,4 +137,6 @@ def add_person(queue, room, room_size, user):
 # print (potentials)
 # print (potentials_idx)
 
-# print (make_room(queue, 6))
+while len(queue) >= 6:
+  make_room(queue, 6)
+print (rooms)

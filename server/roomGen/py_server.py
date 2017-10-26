@@ -34,7 +34,7 @@ queue = []
 
 @app.route('/', methods = ['GET', 'POST'])
 # Should be getting a get request with "ready" users in body
-def roomGen():
+def enqueue():
   # return "hi"
   if request.method == 'POST':
     req_data = request.get_json()
@@ -50,10 +50,20 @@ def roomGen():
 
     queue.append(user)
 
-    return ('done')
+    return 'added'
+  
+  # if request.method == 'GET':
+  #   return ', '.join(queue[1])
+
+
+
+@app.route('/giveMeRoom')
 
 
 if __name__ == '__main__':
     app.run()
-    
+
 print (queue)
+
+if len(queue) >= 6:
+  
