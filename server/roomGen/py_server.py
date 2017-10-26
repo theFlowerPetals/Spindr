@@ -2,8 +2,11 @@ from flask import Flask, request
 import room_testing
 import schedule
 import time
+<<<<<<< refs/remotes/upstream/master
 from threading import Thread
 import json
+=======
+>>>>>>> set up flask
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import scoped_session,sessionmaker
 # from zope.sqlalchemy import ZopeTransactionExtension
