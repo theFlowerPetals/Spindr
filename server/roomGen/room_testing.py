@@ -36,6 +36,8 @@ queue = [userA, userB, userC, userD, userE, userF, userG, userH, userI, userJ, u
 rooms = []
 
 def make_room(queue, room_size, rooms):
+  # print (queue)
+  # print (rooms)
   # pick a random person from queue
   random_queue_idx = random.choice(range(len(queue)))
   room = []   # do we need to persist the room for anything?
@@ -43,9 +45,7 @@ def make_room(queue, room_size, rooms):
   del queue[random_queue_idx]
   
   # put people in the room
-  room_made = add_person(queue, room, room_size, room[len(room) - 1])
-
-  rooms.append(room_made)
+  add_person(queue, room, room_size, room[len(room) - 1])
 
   return rooms
 
@@ -88,7 +88,7 @@ def add_person(queue, room, room_size, user):
       cluster_num = len(potentials)
 
     clf = KMeans(n_clusters=cluster_num)
-    clf.fit(X)
+    # clf.fit(X)
     centroids = clf.cluster_centers_
     labels = clf.labels_
 
@@ -134,7 +134,7 @@ def add_person(queue, room, room_size, user):
     del queue[next_user_idx]
 
     # repeat the process of adding users
-    return add_person(queue, room, room_size, room[len(room) - 1])
+    add_person(queue, room, room_size, room[len(room) - 1])
 
 # print (potentials)
 # print (potentials_idx)
