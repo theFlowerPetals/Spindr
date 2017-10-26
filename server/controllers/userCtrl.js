@@ -3,15 +3,37 @@ const { User } = require('../../db/models/dataModels');
 module.exports = {
   //Create new user on new account login
   createUser: (req, res) => {
-    User.create({
-      name: req.body.name,
-      sex: req.body.sex,
-      email: req.body.email,
-      work: req.body.work,
-      school: req.body.school
+    User.findOrCreate({
+      where: {
+        email: req.body.email,
+      },
+      defaults: {
+        name: req.body.name,
+        email: req.body.email,
+        sex: req.body.sex,
+        // work: req.body.work,
+        // school: req.body.school
+      }
     })
-    .then((user) => {
-      res.status(201).send(user);
+    .spread((user, created) => {
+      console.log('updated user', user)
+      if(created) {
+        res.status(201).send(user);
+      } else {
+        User.update({
+          name: req.body.name
+        },
+        {
+          where: {
+            email: req.body.email
+          }
+        })
+          .then(() => {
+            console.log('user in .then', user)
+            res.status(201).send(user);
+          })
+          .catch(err => res.status(404).send(err.message))
+      }
     })
     .catch(err => res.status(404).send(err.message))
   },

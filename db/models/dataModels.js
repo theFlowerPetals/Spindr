@@ -13,10 +13,12 @@ const User = db.define('User', {
     type: Sequelize.STRING
   },
   work: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    allowNull: true
   },
   school: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    allowNull: true
   },
   interests: {
     type: Sequelize.STRING,

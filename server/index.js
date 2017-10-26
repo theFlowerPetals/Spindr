@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
 require('../db/models/dataModels')
+// require('../fakeData/generateData');
 const route = require('../server/router/routes')
 
 const PORT = 3000;
