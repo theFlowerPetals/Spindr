@@ -5,6 +5,29 @@ import time
 from threading import Thread
 import json
 import requests
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import scoped_session,sessionmaker
+# from zope.sqlalchemy import ZopeTransactionExtension
+
+# #make a connection to DB
+
+# #create a get call to grab all the ready users
+
+#
+# DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+
+# z  = DBSession.query(Book).filter_by(author_id=1)
+
+# def job():
+#     print("I'm working...")
+
+# schedule.every(10).seconds.do(job)
+
+# while True:
+#   schedule.run_pending()
+#   time.sleep(1)
+
+
 
 app = Flask(__name__)
 
