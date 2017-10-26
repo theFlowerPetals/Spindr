@@ -1,8 +1,9 @@
-from flask import Flask
-from flask import request
-from . import room_testing
+from flask import Flask, request
+import room_testing
 import schedule
 import time
+from threading import Thread
+import json
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import scoped_session,sessionmaker
 # from zope.sqlalchemy import ZopeTransactionExtension
@@ -28,9 +29,11 @@ import time
 
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
+# app.config['DEBUG'] = True
 
 queue = []
+rooms = []
+
 
 @app.route('/', methods = ['GET', 'POST'])
 # Should be getting a get request with "ready" users in body
@@ -39,31 +42,42 @@ def enqueue():
   if request.method == 'POST':
     req_data = request.get_json()
     name = req_data['name']
-    email = req_data['email']
-    socialScore = req_data['socialScore']
+    sex = req_data['sex']
+    socialScore = json.loads(req_data['socialScore'])
     interests = req_data['interests']
-    partnerScore = req_data['partnerScore']
+    partnerScore = json.loads(req_data['partnerScore'])
     partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
     weighted = req_data['partnerWeightedInterests']
 
-    user = [name, email, socialScore, interests, partnerScore, partnerCumulativeInterest, weighted]
+    user = [sex, socialScore, interests, partnerScore, weighted]
 
     queue.append(user)
 
     return 'added'
   
-  # if request.method == 'GET':
-  #   return ', '.join(queue[1])
+  if request.method == 'GET':
+    return ', '.join(queue[len(queue) - 1])
 
+# @app.route('/giveMeRoom')
 
+def create_rooms():
+  print ('waiting')
+  if len(queue) >= 3:
+    print (room_testing.make_room(queue, 2, rooms))
+    print (queue)
+    print (rooms)
+    print ("got here")
 
-@app.route('/giveMeRoom')
-
+def run_schedule():
+  while 1:
+    schedule.run_pending()
+    time.sleep(1)
 
 if __name__ == '__main__':
-    app.run()
+  schedule.every(5).seconds.do(create_rooms)
+  t = Thread(target=run_schedule)
+  t.start()
+  print ('hi')
+  app.run()
 
-print (queue)
-
-if len(queue) >= 6:
   

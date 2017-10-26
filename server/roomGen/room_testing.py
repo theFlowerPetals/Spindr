@@ -35,7 +35,7 @@ userX = ['f', 5, ['a', 'b', 'c', 'i', 'l', 'o', 'q', 'r', 'w'], 7, {'a':0.1, 'b'
 queue = [userA, userB, userC, userD, userE, userF, userG, userH, userI, userJ, userK, userL, userM, userN, userO, userP, userQ, userR, userS, userT, userU, userV, userW, userX]
 rooms = []
 
-def make_room(queue, room_size):
+def make_room(queue, room_size, rooms):
   # pick a random person from queue
   random_queue_idx = random.choice(range(len(queue)))
   room = []   # do we need to persist the room for anything?
@@ -46,6 +46,8 @@ def make_room(queue, room_size):
   room_made = add_person(queue, room, room_size, room[len(room) - 1])
 
   rooms.append(room_made)
+
+  return rooms
 
 #for one male:
 def add_person(queue, room, room_size, user):
@@ -137,6 +139,6 @@ def add_person(queue, room, room_size, user):
 # print (potentials)
 # print (potentials_idx)
 
-while len(queue) >= 6:
-  make_room(queue, 6)
-print (rooms)
+# while len(queue) >= 6:
+#   make_room(queue, 6)
+# print (rooms)
