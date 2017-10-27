@@ -2,11 +2,8 @@ from flask import Flask, request
 import room_testing
 import schedule
 import time
-<<<<<<< refs/remotes/upstream/master
 from threading import Thread
 import json
-=======
->>>>>>> set up flask
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import scoped_session,sessionmaker
 # from zope.sqlalchemy import ZopeTransactionExtension
@@ -80,6 +77,11 @@ def run_schedule():
     schedule.run_pending()
     time.sleep(1)
 
+# @app.after_request
+# def home(resp):
+#     resp.headers['Access-Control-Allow-Origin'] = '*'
+#     resp.headers["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept"
+#     return resp
 if __name__ == '__main__':
   schedule.every(15).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
