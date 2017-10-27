@@ -47,7 +47,7 @@ def enqueue():
     weighted = req_data['match_weighted_interests'] 
     user = [userId, sex, socialScore, interests, partnerScore, weighted]
 
-    queue.append(user)
+    # queue.append(user)
 
     return 'added'
   
