@@ -78,11 +78,17 @@ def run_schedule():
     schedule.run_pending()
     time.sleep(1)
 
+# @app.after_request
+# def home(resp):
+#     resp.headers['Access-Control-Allow-Origin'] = '*'
+#     resp.headers["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept"
+#     return resp
 if __name__ == '__main__':
   schedule.every(15).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
+<<<<<<< refs/remotes/upstream/master
 
 
   API_ENDPOINT = "http://localhost:3000/flask"
@@ -92,3 +98,6 @@ if __name__ == '__main__':
   data = {'rooms': rooms}
   requests.post(url = API_ENDPOINT, data = data)
   app.run()
+=======
+  app.run()
+>>>>>>> prep for rebase
