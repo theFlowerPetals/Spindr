@@ -72,6 +72,11 @@ def run_schedule():
     schedule.run_pending()
     time.sleep(1)
 
+# @app.after_request
+# def home(resp):
+#     resp.headers['Access-Control-Allow-Origin'] = '*'
+#     resp.headers["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept"
+#     return resp
 if __name__ == '__main__':
   schedule.every(4).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
