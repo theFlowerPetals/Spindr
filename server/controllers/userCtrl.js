@@ -1,9 +1,9 @@
-const { User } = require('../../db/models/dataModels');
+const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   //Create new user on new account login
   createUser: (req, res) => {
-    User.findOrCreate({
+    Tables.User.findOrCreate({
       where: {
         email: req.body.email,
       },
@@ -20,7 +20,7 @@ module.exports = {
       if(created) {
         res.status(201).send(user);
       } else {
-        User.update({
+        Tables.User.update({
           name: req.body.name
         },
         {
@@ -40,7 +40,7 @@ module.exports = {
   
   //Grab all users from db
   getAllUsers: (req, res) => {
-    User.findAll({})
+    Tables.User.findAll({})
     .then((users) => {
       res.status(200).send(users);
     })
@@ -49,7 +49,7 @@ module.exports = {
   
   //Grab user from db using id
   getUserById: (req, res) => {
-    User.findOne({
+    Tables.User.findOne({
       where: {
         id: req.params.id
       }
@@ -62,7 +62,7 @@ module.exports = {
   
   //Grab user from db using email
   getUserByEmail: (req, res) => {
-    User.findOne({
+    Tables.User.findOne({
       where: {
         email: req.params.email
       }
@@ -75,7 +75,7 @@ module.exports = {
   
   //Add user interests and social score
   updateUserInfo: (req, res) => {
-    User.findOne({
+    Tables.User.findOne({
       where: {
         id: req.params.id
       }
@@ -95,7 +95,7 @@ module.exports = {
 
   //Add user match interests
   upateMatchInterests: (req, res) => {
-    User.findOne({
+    Tables.User.findOne({
       where: {
         id: req.params.id
       }

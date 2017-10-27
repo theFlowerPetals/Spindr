@@ -1,9 +1,9 @@
-const { Icebreaker } = require('../../db/models/dataModels');
+const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   //Fetch ice-breaker question from db
   getQuestion: (req, res) => {
-    Icebreaker.findAll({})
+    Tables.Icebreaker.findAll({})
     .then((questions) => {
       res.status(200).send(questions);
     })
@@ -11,7 +11,7 @@ module.exports = {
   },
   //Add a new question to db
   addQuestion: (req, res) => {
-    Icebreaker.create({
+    Tables.Icebreaker.create({
       question: req.body.question
     })
     .then((question) => {
