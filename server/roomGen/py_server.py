@@ -34,7 +34,6 @@ app = Flask(__name__)
 queue = []
 rooms = []
 
-
 @app.route('/', methods = ['GET', 'POST'])
 # Should be getting a get request with "ready" users in body
 def enqueue():
@@ -61,10 +60,15 @@ def enqueue():
 # @app.route('/giveMeRoom')
 
 def create_rooms():
+  global rooms
   print ('waiting')
-  if len(queue) >= 3:
-    print (room_testing.make_room(queue, 2, rooms))
+  while len(queue) >= 4:
+    print ('room testing')
+    rooms = room_testing.make_room(queue, 4, rooms)
+    # rooms = rooms_stack
+    print ('queue')
     print (queue)
+    print ('rooms')
     print (rooms)
     print ("got here")
 
@@ -74,10 +78,8 @@ def run_schedule():
     time.sleep(1)
 
 if __name__ == '__main__':
-  schedule.every(5).seconds.do(create_rooms)
+  schedule.every(15).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
   app.run()
-
-  
