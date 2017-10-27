@@ -1,8 +1,8 @@
-const { Image } = require('../../db/models/dataModels');
+const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   getUserImages: (req, res) => {
-    Image.findAll({})
+    Tables.Image.findAll({})
     .then((images) => {
       console.log('found images ', images)
       res.status(200).send(images)
@@ -12,7 +12,7 @@ module.exports = {
 
   addImage: (req, res) => {
     console.log('THIS IS REQ: ', req.body)
-    Image.create({
+    Tables.Image.create({
       user_id: req.body.user_id,
       img_urls: req.body.img_urls
     })
@@ -23,7 +23,7 @@ module.exports = {
     .catch(err => res.status(404).send(err.message));
   },
   // addUserImages: (req, res) => {
-  //   Image.findOrCreate({
+  //   Tables.Image.findOrCreate({
   //     where: {
   //       user_id: req.params.user_id
   //     }, 
@@ -43,7 +43,7 @@ module.exports = {
   //       }
   //       else {
   //         // some other logic
-  //         Image.update({
+  //         Tables.Image.update({
   //           user_id: req.params.user_id,
   //           img_urls: req.body.imgUrls,
   //         },

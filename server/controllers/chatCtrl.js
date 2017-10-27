@@ -1,8 +1,8 @@
-const { Chat } = require('../../db/models/dataModels');
+const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   getChats: (req, res) => {
-    Chat.findAll({
+    Tables.Chat.findAll({
       where: {
         user_one: req.body.user1,
         user_two: req.body.user2
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   postChats: (req, res) => {
-    Chat.create({
+    Tables.Chat.create({
       user_one: req.body.user1,
       user_two: req.body.user2,
       chat_entry: req.body.chat
@@ -27,7 +27,7 @@ module.exports = {
   },
 
   deleteChat: (req, res) => {
-    Chat.findOne({
+    Tables.Chat.findOne({
       where: {
         user_one: req.body.user1,
         user_two: req.body.user2

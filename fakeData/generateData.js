@@ -2,12 +2,6 @@ const fs = require('fs');
 
 const faker = require('faker');
 
-
-// generate dataSet as example
-// fs.writeFile(__dirname + '/dataSet.json',  JSON.stringify(faker.helpers.userCard()), function() {
-//   console.log("dataSet generated successfully!");
-// });
-// generate bigDataSet as example
 const bigSet = [];
 
 for(let i = 20; i >= 0; i--) {

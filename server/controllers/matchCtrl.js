@@ -1,8 +1,8 @@
-const { Match } = require('../../db/models/dataModels');
+const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   addMatchesRow: (req, res) => {
-    Match.create({
+    Tables.Match.create({
       user_id: req.params.id
     })
     .then((row) => {
@@ -12,7 +12,7 @@ module.exports = {
   },
 
   getUserMatches: (req, res) => {
-    Match.findAll({
+    Tables.Match.findAll({
       where: {
         user_id: req.params.id
       }
@@ -24,7 +24,7 @@ module.exports = {
   },
 
   addUserMatch: (req, res) => {
-    Match.findOne({
+    Tables.Match.findOne({
       where: {
         user_id: req.params.id
       }
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   addUserLike: (req, res) => {
-    Match.findOne({
+    Tables.Match.findOne({
       where: {
         user_id: req.params.id
       }
@@ -64,7 +64,7 @@ module.exports = {
   },
 
   addUserBlock: (req, res) => {
-    Match.findOne({
+    Tables.Match.findOne({
       where: {
         user_id: req.params.id
       }
