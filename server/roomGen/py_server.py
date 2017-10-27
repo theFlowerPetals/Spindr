@@ -1,15 +1,16 @@
-from flask import Flask
-from flask import request
-from . import room_testing
+from flask import Flask, request
+import room_testing
 import schedule
 import time
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session,sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from threading import Thread
+import json
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import scoped_session,sessionmaker
+# from zope.sqlalchemy import ZopeTransactionExtension
 
-#make a connection to DB
+# #make a connection to DB
 
-#create a get call to grab all the ready users
+# #create a get call to grab all the ready users
 
 #
 # DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
@@ -25,23 +26,60 @@ from zope.sqlalchemy import ZopeTransactionExtension
 #   schedule.run_pending()
 #   time.sleep(1)
 
+
+
 app = Flask(__name__)
-app.config['DEBUG'] = True
+# app.config['DEBUG'] = True
+
+queue = []
+rooms = []
 
 @app.route('/', methods = ['GET', 'POST'])
 # Should be getting a get request with "ready" users in body
-def roomGen():
-  return "hi"
-  # if request.method == 'POST':
-    # req_data = request.get_json()
-    # name = req_data['name']
-    # socialScore = req_data['socialScore']
-    # interests = req_data['interests']
-    # weighted = req_data['partnerWeightedInterests']
+def enqueue():
+  # return "hi"
+  if request.method == 'POST':
+    req_data = request.get_json()
+    name = req_data['name']
+    sex = req_data['sex']
+    socialScore = json.loads(req_data['socialScore'])
+    interests = req_data['interests']
+    partnerScore = json.loads(req_data['partnerScore'])
+    partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
+    weighted = req_data['partnerWeightedInterests']
 
-    # return weighted
+    user = [sex, socialScore, interests, partnerScore, weighted]
 
-    # job()
+    queue.append(user)
+
+    return 'added'
+  
+  if request.method == 'GET':
+    return ', '.join(queue[len(queue) - 1])
+
+# @app.route('/giveMeRoom')
+
+def create_rooms():
+  global rooms
+  # print ('waiting')
+  while len(queue) >= 4:
+    rooms = room_testing.make_room(queue, 4, rooms)
+    # print ('room testing')
+    # rooms = rooms_stack
+    # print ('queue')
+    # print (queue)
+    # print ('rooms')
+    # print (rooms)
+    # print ("got here")
+
+def run_schedule():
+  while 1:
+    schedule.run_pending()
+    time.sleep(1)
 
 if __name__ == '__main__':
-    app.run()
+  schedule.every(15).seconds.do(create_rooms)
+  t = Thread(target=run_schedule)
+  t.start()
+  print ('hi')
+  app.run()
