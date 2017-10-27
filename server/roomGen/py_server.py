@@ -61,16 +61,16 @@ def enqueue():
 
 def create_rooms():
   global rooms
-  print ('waiting')
+  # print ('waiting')
   while len(queue) >= 4:
-    print ('room testing')
     rooms = room_testing.make_room(queue, 4, rooms)
+    # print ('room testing')
     # rooms = rooms_stack
-    print ('queue')
-    print (queue)
-    print ('rooms')
-    print (rooms)
-    print ("got here")
+    # print ('queue')
+    # print (queue)
+    # print ('rooms')
+    # print (rooms)
+    # print ("got here")
 
 def run_schedule():
   while 1:

@@ -46,14 +46,14 @@ def make_room(queue, room_size, rooms):
   
   # put people in the room
 
-  return add_person(queue, room, room_size, room[len(room) - 1])
+  # return add_person(queue, room, room_size, room[len(room) - 1])
 
-  # room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
-  # print ('room made')
-  # print (room_made)
-  # rooms.append(room_made)
+  room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
+  print ('room made')
+  print (room_made)
+  rooms.append(room_made)
 
-  # return rooms
+  return rooms
 
 #for one male:
 def add_person(queue, room, room_size, user):
@@ -142,7 +142,7 @@ def add_person(queue, room, room_size, user):
     del queue[next_user_idx]
 
     # repeat the process of adding users
-    add_person(queue, room, room_size, room[len(room) - 1])
+    return add_person(queue, room, room_size, room[len(room) - 1])
 
 # print (potentials)
 # print (potentials_idx)
