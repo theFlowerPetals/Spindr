@@ -3,28 +3,15 @@ const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
-require('../db/models/dataModels')
+require('../db/models/dataModels');
 // require('../fakeData/generateData');
-const route = require('../server/router/routes')
+const route = require('../server/router/routes');
+const socketio = require('socket.io');
 
 const PORT = 3000;
 
 const app = express();
-
-//Socket.io Init
-// const server = require('http').Server(app);
-// const io = require('socket.io')(server);
-// server.listen(3000);
-
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-
-//   // socket.on('new-message', function(msg){
-//   //   console.log('message: ', msg);
-//   //   io.emit('receive-message', msg);
-//   // })
-
-// });
+const webSocket = socketio(app);
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
@@ -48,3 +35,6 @@ app.listen(PORT, () => {
 // server.listen(socketPort, () => {
 //   console.log(`Listening on port (socket) ${socketPort}`)
 // })
+webSocket.on('connection', (socket) => {
+  console.log('Connected:', socket.id)
+})
