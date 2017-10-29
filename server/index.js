@@ -34,6 +34,13 @@ app.use('/api', route)
 // app.get('/*', function (req, res) {
 //   res.sendFile(path.join(__dirname, '../client/static', 'index.html'));
 // })
+
+//Listen to flask server sending rooms 
+app.post('/flask', (req, res) => {
+  console.log('FLASK DATA: ', res.req.body);
+  res.status(200).send('Rooms received');
+})
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
 })
