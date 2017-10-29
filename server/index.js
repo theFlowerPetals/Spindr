@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
@@ -11,7 +12,8 @@ const socketio = require('socket.io');
 const PORT = 3000;
 
 const app = express();
-const webSocket = socketio(app);
+const server = http.Server(app);
+const websocket = socketio(server);
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
