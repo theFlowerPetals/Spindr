@@ -1,4 +1,4 @@
-#!/Users/wook/Documents/HR/spindr-app-mobile/roomGen/venv/bin/python
+#!/Users/Dhruv/Desktop/spindr-app-server/server/roomGen/venv/bin/python
 
 import sys
 import getopt

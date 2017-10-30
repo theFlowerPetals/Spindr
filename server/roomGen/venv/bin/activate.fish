@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/wook/Documents/HR/spindr-app-mobile/roomGen/venv"
+set -gx VIRTUAL_ENV "/Users/Dhruv/Desktop/spindr-app-server/server/roomGen/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

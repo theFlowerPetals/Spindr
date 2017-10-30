@@ -4,6 +4,7 @@ import schedule
 import time
 from threading import Thread
 import json
+import requests
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import scoped_session,sessionmaker
 # from zope.sqlalchemy import ZopeTransactionExtension
@@ -82,4 +83,12 @@ if __name__ == '__main__':
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
+
+
+  API_ENDPOINT = "http://localhost:3000/flask"
+
+  rooms = [1, 2, 3, 4]
+
+  data = {'rooms': rooms}
+  requests.post(url = API_ENDPOINT, data = data)
   app.run()
