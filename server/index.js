@@ -8,23 +8,63 @@ require('../db/models/dataModels')
 const route = require('../server/router/routes')
 
 const PORT = 3000;
+const serverPort = 3456;
 
 const app = express();
 
 //Socket.io Init
-// const server = require('http').Server(app);
-// const io = require('socket.io')(server);
-// server.listen(3000);
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
 
-//   // socket.on('new-message', function(msg){
-//   //   console.log('message: ', msg);
-//   //   io.emit('receive-message', msg);
-//   // })
+const roomList = {};
 
-// });
+server.listen(serverPort, () => {
+  console.log(`Listening on server port ${serverPort}`)
+});
+
+const socketIdsInRoom = (name) => {
+  const socketIds = io.nsps['/'].adapter.rooms[name];
+  if (socketIds) {
+    let collection = [];
+    for (let key in socketIds) {
+      collection.push(key);
+    }
+    return collection;
+  } else {
+    return [];
+  }
+}
+
+io.on('connection', (socket) => {
+  console.log('socket connected');
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+    if (socket.room) {
+      let room = socket.room;
+      io.to(room).emit('leave', socket.id);
+      socket.leave(room);
+    }
+  });
+
+  socket.on('join', (name, callback) => {
+    console.log('join ', name);
+    let socketIds = socketIdsInRoom(name);
+    callback(socketIds);
+    socket.join(name);
+    socket.room = name;
+  });
+
+
+  socket.on('exchange', (data) => {
+    console.log('exchange: ', data);
+    data.from = socket.id;
+    let to = io.sockets.connected[data.to];
+    to.emit('exchange', data);
+  });
+
+});
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
@@ -44,7 +84,3 @@ app.post('/flask', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
 })
-
-// server.listen(socketPort, () => {
-//   console.log(`Listening on port (socket) ${socketPort}`)
-// })
