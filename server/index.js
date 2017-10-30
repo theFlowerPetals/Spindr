@@ -5,7 +5,6 @@ const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
-const route = require('../server/router/routes')
 const app = express();
 const fs = require('fs');
 const https = require('https');
@@ -13,6 +12,10 @@ const http = require('http');
 const server = http.Server(app);
 const io = require('socket.io')(server)
 require('../db/models/dataModels')
+// require('../fakeData/generateData');
+const route = require('../server/router/routes');
+const socketio = require('socket.io');
+// const chatCtrl = require('./controllers/chatCtrl');
 
 const PORT = 3000;
 

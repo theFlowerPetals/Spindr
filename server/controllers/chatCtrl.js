@@ -2,25 +2,21 @@ const Tables = require('../../db/models/dataModels');
 
 module.exports = {
   getChats: (req, res) => {
-    Tables.Chat.findAll({
-      where: {
-        user_one: req.body.user1,
-        user_two: req.body.user2
-      }
-    })
+    Tables.Chat.findAll()
     .then((chat) => {
-      res.status(200).send(user);
+      res.status(200).send(chat);
     })
     .catch(err => res.status(404).send(err))
   },
 
   postChats: (req, res) => {
     Tables.Chat.create({
-      user_one: req.body.user1,
-      user_two: req.body.user2,
-      chat_entry: req.body.chat
+      user_one: req.body.user_one,
+      chat_entry: req.body.chat_entry
     })
     .then((chat) => {
+      console.log('Req user_one:', req.body.user_one);
+      console.log('Req chat_entry:', req.body.chat_entry);
       res.status(201).send(chat);
     })
     .catch(err => res.status(404).send(err));
