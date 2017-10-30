@@ -8,6 +8,7 @@ require('../db/models/dataModels');
 // require('../fakeData/generateData');
 const route = require('../server/router/routes');
 const socketio = require('socket.io');
+// const chatCtrl = require('./controllers/chatCtrl');
 
 const PORT = 3000;
 
@@ -37,6 +38,24 @@ app.listen(PORT, () => {
 // server.listen(socketPort, () => {
 //   console.log(`Listening on port (socket) ${socketPort}`)
 // })
-webSocket.on('connection', (socket) => {
-  console.log('Connected:', socket.id)
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+  });
+
+server.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`)
 })
+
+const clients = {};
+const users = {};
+
+let chatId = 1;
+
+websocket.on('connection', (socket) => {
+  console.log('A client just joined on', socket.id);
+  socket.on('message', (message) => {
+    console.log('Msg received:', message);
+    socket.broadcast.emit('message', message);
+  });
+});
