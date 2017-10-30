@@ -89,7 +89,6 @@ if __name__ == '__main__':
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
-<<<<<<< refs/remotes/upstream/master
 
 
   API_ENDPOINT = "http://localhost:3000/flask"
@@ -99,6 +98,3 @@ if __name__ == '__main__':
   data = {'rooms': rooms}
   requests.post(url = API_ENDPOINT, data = data)
   app.run()
-=======
-  app.run()
->>>>>>> prep for rebase
