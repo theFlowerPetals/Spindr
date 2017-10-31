@@ -107,15 +107,14 @@ io.on('connection', (socket) => {
 //   });
 
 
-const clients = {};
-const users = {};
-
-let chatId = 1;
-
 websocket.on('connection', (socket) => {
   console.log('A client just joined on', socket.id);
-  socket.on('message', (message) => {
-    console.log('Msg received:', message.text);
-    socket.emit('message', message.text);
+  socket.on('joinRoom', (room) => {
+    socket.join(room);
+    console.log('Backend socket joined room:', room);
+  })
+  socket.on('message', (message, room) => {
+    console.log('Msg received:', message.text, 'To room:', room);
+    socket.to(room).emit('message', [message.text]);
   });
 });
