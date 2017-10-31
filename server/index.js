@@ -94,3 +94,28 @@ io.on('connection', (socket) => {
     }
   });
 });
+// app.listen(PORT, () => {
+//   console.log(`Listening on port ${PORT}`)
+// })
+
+// server.listen(socketPort, () => {
+//   console.log(`Listening on port (socket) ${socketPort}`)
+// })
+
+// app.get('/', function(req, res){
+//   res.sendFile(__dirname + '/index.html');
+//   });
+
+
+const clients = {};
+const users = {};
+
+let chatId = 1;
+
+websocket.on('connection', (socket) => {
+  console.log('A client just joined on', socket.id);
+  socket.on('message', (message) => {
+    console.log('Msg received:', message.text);
+    socket.emit('message', message.text);
+  });
+});
