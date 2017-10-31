@@ -31,17 +31,17 @@ app.post('/flask', (req, res) => {
   res.status(200).send('Rooms received');
 })
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
-})
+// app.listen(PORT, () => {
+//   console.log(`Listening on port ${PORT}`)
+// })
 
 // server.listen(socketPort, () => {
 //   console.log(`Listening on port (socket) ${socketPort}`)
 // })
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-  });
+// app.get('/', function(req, res){
+//   res.sendFile(__dirname + '/index.html');
+//   });
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
@@ -55,7 +55,7 @@ let chatId = 1;
 websocket.on('connection', (socket) => {
   console.log('A client just joined on', socket.id);
   socket.on('message', (message) => {
-    console.log('Msg received:', message);
-    socket.broadcast.emit('message', message);
+    console.log('Msg received:', message.text);
+    socket.emit('message', message.text);
   });
 });
