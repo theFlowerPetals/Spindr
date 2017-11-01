@@ -54,14 +54,22 @@ const Image = db.define('Image', {
 });
 
 const Chat = db.define('Chat', {
-  user_one: {
-    type: Sequelize.INTEGER
-  },
+  // user_one: {
+  //   type: Sequelize.INTEGER
+  // },
   // user_two: {
   //   type: Sequelize.INTEGER
   // },
+  // chat_entry: {
+  //   type: Sequelize.TEXT
+  // }
+  room_num: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   chat_entry: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    allowNull: false
   }
 });
 

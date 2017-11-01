@@ -107,14 +107,27 @@ io.on('connection', (socket) => {
 //   });
 
 
+const rooms = new Set();
+
 websocket.on('connection', (socket) => {
-  console.log('A client just joined on', socket.id);
-  socket.on('joinRoom', (room) => {
-    socket.join(room);
-    console.log('Backend socket joined room:', room);
+  console.log('A client just joined on:', socket.id);
+  socket.on('joinRoom', (id1, id2) => {
+    // Get sum of IDs
+    let sumOfIDs = id1 + id2;
+    // Push sum to rooms
+    rooms.add(sumOfIDs);
+    console.log('BACKEND ROOMS:', rooms);
+    // Before sending client to a room
+      // Check if sum is in room
+    if(rooms.has(sumOfIDs)) {
+      socket.emit('roomExists', true);
+    }
+    
+    socket.join(sumOfIDs);
+    console.log('JOINED ROOM:', sumOfIDs);
   })
   socket.on('message', (message, room) => {
-    console.log('Msg received:', message.text, 'To room:', room);
+    console.log('Msg received:', message.text, '... To room:', room);
     socket.to(room).emit('message', [message.text]);
   });
 });
