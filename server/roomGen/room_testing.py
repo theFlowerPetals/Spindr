@@ -51,14 +51,14 @@ def make_room(queue, room_size, rooms):
   room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
   print ('room made')
   print (room_made)
-  rooms.append(room_made)
+  # rooms.append(room_made)
 
-  return rooms
+  return room_made
 
 #for one male:
 def add_person(queue, room, room_size, user):
-  print ('room inside add_person')
-  print (room)
+  # print ('room inside add_person')
+  # print (room)
   if len(room) == room_size:
     return room
   else:
@@ -85,65 +85,68 @@ def add_person(queue, room, room_size, user):
         #put potential into potentials
         potentials.append(potential)
         #print (potential)
+      
+    if len(potentials) > 0:
+      X = np.array(potentials)
+      # print(potentials)
 
-    X = np.array(potentials)
-    # print(potentials)
+      #define num of clusters here later
+      if len(potentials) >= 4:
+        cluster_num = 4
+      else:
+        cluster_num = len(potentials)
 
-    #define num of clusters here later
-    if len(potentials) >= 4:
-      cluster_num = 4
+      clf = KMeans(n_clusters=cluster_num)
+      clf.fit(X)
+      centroids = clf.cluster_centers_
+      labels = clf.labels_
+
+      # find the index of the centroid with the highest x*y value
+      best_centroid_val = centroids[0][0] * centroids[0][1]
+      best_centroid_idx = 0
+      for j in range(1, len(centroids)):
+        if centroids[j][0] * centroids[j][1] > best_centroid_val:
+          best_centroid_val = centroids[j][0] * centroids[j][1]
+          best_centroid_idx = j
+
+      # print (best_centroid_val, best_centroid_idx)
+
+      # colors = ['g.', 'r.', 'c.', 'b.']
+
+      # print (labels)
+
+      # for centroid in centroids:
+      #   #print (centroid)
+      # for k in range (len(X)):
+      #   plt.plot(X[k][0], X[k][1], colors[labels[k]], markersize = 10)
+      # plt.scatter(centroids[:,0], centroids[:,1], marker='x', s=50, linewidths = 5)
+      # plt.ylim([0,1])
+      # plt.xlim([0,1])
+      # plt.show()
+
+      # in the queue, randomly pick a user from users that have the index as their labels
+      idx_of_users_in_cluster = []
+      for n in range(len(labels)):
+        if labels[n] == best_centroid_idx:
+          idx_of_users_in_cluster.append(n)
+
+      # print (idx_of_user_in_cluster)
+      random_idx = random.choice(idx_of_users_in_cluster)
+      next_user_idx = potentials_idx[random_idx]
+
+      # print (queue[next_user_idx])
+
+      # add the user to the room
+      room.append(queue[next_user_idx])
+
+      # remove the user from the queue
+      del queue[next_user_idx]
+
+      # repeat the process of adding users
+      return add_person(queue, room, room_size, room[len(room) - 1])
+    
     else:
-      cluster_num = len(potentials)
-
-    clf = KMeans(n_clusters=cluster_num)
-    clf.fit(X)
-    centroids = clf.cluster_centers_
-    labels = clf.labels_
-
-    # find the index of the centroid with the highest x*y value
-    best_centroid_val = centroids[0][0] * centroids[0][1]
-    best_centroid_idx = 0
-    for j in range(1, len(centroids)):
-      if centroids[j][0] * centroids[j][1] > best_centroid_val:
-        best_centroid_val = centroids[j][0] * centroids[j][1]
-        best_centroid_idx = j
-
-    # print (best_centroid_val, best_centroid_idx)
-
-    # colors = ['g.', 'r.', 'c.', 'b.']
-
-    # print (labels)
-
-    # for centroid in centroids:
-    #   #print (centroid)
-    # for k in range (len(X)):
-    #   plt.plot(X[k][0], X[k][1], colors[labels[k]], markersize = 10)
-    # plt.scatter(centroids[:,0], centroids[:,1], marker='x', s=50, linewidths = 5)
-    # plt.ylim([0,1])
-    # plt.xlim([0,1])
-    # plt.show()
-
-    # in the queue, randomly pick a user from users that have the index as their labels
-    idx_of_users_in_cluster = []
-    for n in range(len(labels)):
-      if labels[n] == best_centroid_idx:
-        idx_of_users_in_cluster.append(n)
-
-    # print (idx_of_user_in_cluster)
-    random_idx = random.choice(idx_of_users_in_cluster)
-    next_user_idx = potentials_idx[random_idx]
-
-    # print (queue[next_user_idx])
-
-    # add the user to the room
-    room.append(queue[next_user_idx])
-
-    # remove the user from the queue
-    del queue[next_user_idx]
-
-    # repeat the process of adding users
-    return add_person(queue, room, room_size, room[len(room) - 1])
-
+      print ('no potential match exists')
 # print (potentials)
 # print (potentials_idx)
 
