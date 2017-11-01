@@ -91,10 +91,10 @@ if __name__ == '__main__':
   print ('hi')
 
 
-  API_ENDPOINT = "http://localhost:3000/flask"
+  API_ENDPOINT = "http://13.57.52.97:3000/flask"
 
   rooms = [1, 2, 3, 4]
 
   data = {'rooms': rooms}
   requests.post(url = API_ENDPOINT, data = data)
-  app.run()
+  app.run(host=“13.57.39.204”)
