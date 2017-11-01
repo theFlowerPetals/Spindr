@@ -11,11 +11,11 @@ module.exports = {
 
   postChats: (req, res) => {
     Tables.Chat.create({
-      user_one: req.body.user_one,
+      room_num: req.body.room_num,
       chat_entry: req.body.chat_entry
     })
     .then((chat) => {
-      console.log('Req user_one:', req.body.user_one);
+      console.log('Req room_num:', req.body.room_num);
       console.log('Req chat_entry:', req.body.chat_entry);
       res.status(201).send(chat);
     })
