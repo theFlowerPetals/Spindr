@@ -61,10 +61,17 @@ def enqueue():
 # @app.route('/giveMeRoom')
 
 def create_rooms():
-  global rooms
+  # global rooms
   # print ('waiting')
   while len(queue) >= 4:
-    rooms = room_testing.make_room(queue, 4, rooms)
+    room_made = room_testing.make_room(queue, 4, [])
+    print ('queue', queue)
+    print ('room made here %s' %room_made)
+    API_ENDPOINT = "http://localhost:3000/flask"
+
+    # rooms = [1, 2, 3, 4]
+    data = {'room': room_made}
+    requests.post(url = API_ENDPOINT, data = data)
     # print ('room testing')
     # rooms = rooms_stack
     # print ('queue')
@@ -79,16 +86,10 @@ def run_schedule():
     time.sleep(1)
 
 if __name__ == '__main__':
-  schedule.every(15).seconds.do(create_rooms)
+  schedule.every(10).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
 
-
-  API_ENDPOINT = "http://localhost:3000/flask"
-
-  rooms = [1, 2, 3, 4]
-
-  data = {'rooms': rooms}
-  requests.post(url = API_ENDPOINT, data = data)
+  
   app.run()
