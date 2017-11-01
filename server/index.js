@@ -1,70 +1,21 @@
-const express = require('express');
-const parser = require('body-parser');
-const morgan = require('morgan');
-const path = require('path');
-const db = require('../db/db');
+var express = require('express');
+var http = require('http');
+var parser = require('body-parser');
+var morgan = require('morgan');
+var path = require('path');
+var db = require('../db/db');
 require('../db/models/dataModels')
+var videoSocket = require('socket.io');
 // require('../fakeData/generateData');
-const route = require('../server/router/routes')
+var route = require('../server/router/routes')
 
-const PORT = 3000;
-const serverPort = 3456;
+var PORT = 3000;
 
-const app = express();
+var app = express();
 
 //Socket.io Init
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
-
-
-const roomList = {};
-
-server.listen(serverPort, () => {
-  console.log(`Listening on server port ${serverPort}`)
-});
-
-const socketIdsInRoom = (name) => {
-  const socketIds = io.nsps['/'].adapter.rooms[name];
-  if (socketIds) {
-    let collection = [];
-    for (let key in socketIds) {
-      collection.push(key);
-    }
-    return collection;
-  } else {
-    return [];
-  }
-}
-
-io.on('connection', (socket) => {
-  console.log('socket connected');
-
-  socket.on('disconnect', () => {
-    console.log('disconnected');
-    if (socket.room) {
-      let room = socket.room;
-      io.to(room).emit('leave', socket.id);
-      socket.leave(room);
-    }
-  });
-
-  socket.on('join', (name, callback) => {
-    console.log('join ', name);
-    let socketIds = socketIdsInRoom(name);
-    callback(socketIds);
-    socket.join(name);
-    socket.room = name;
-  });
-
-
-  socket.on('exchange', (data) => {
-    console.log('exchange: ', data);
-    data.from = socket.id;
-    let to = io.sockets.connected[data.to];
-    to.emit('exchange', data);
-  });
-
-});
+var videoServer = http.createServer(app);
+var videoWebsocket = videoSocket(videoServer);
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
@@ -72,15 +23,64 @@ app.use(morgan('dev'))
 app.use('/api', route)
 // app.use(express.static(path.resolve(__dirname, '../client/static')))
 // app.get('/*', function (req, res) {
-//   res.sendFile(path.join(__dirname, '../client/static', 'index.html'));
-// })
+  //   res.sendFile(path.join(__dirname, '../client/static', 'index.html'));
+  // })
+  
+  //Listen to flask server sending rooms 
+  app.post('/flask', function(req, res){
+    console.log('FLASK DATA: ', res.req.body);
+    res.status(200).send('Rooms received');
+  })
+  
+  videoServer.listen(PORT, function(){
+    console.log('Listening on port ', PORT);
+  })
 
-//Listen to flask server sending rooms 
-app.post('/flask', (req, res) => {
-  console.log('FLASK DATA: ', res.req.body);
-  res.status(200).send('Rooms received');
-})
-
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
-})
+  var roomList = {};
+  
+  // server.listen(serverPort, () => {
+  //   console.log(`Listening on server port ${serverPort}`)
+  // });
+  
+  var socketIdsInRoom = function(name){
+    var socketIds = videoWebsocket.nsps['/'].adapter.rooms[name];
+    if (socketIds) {
+      var collection = [];
+      for (var key in socketIds) {
+        collection.push(key);
+      }
+      return collection;
+    } else {
+      return [];
+    }
+  }
+  
+  videoWebsocket.on('connection', function(socket){
+    console.log('socket connected');
+  
+    socket.on('disconnect', () => {
+      console.log('disconnected');
+      if (socket.room) {
+        var room = socket.room;
+        videoWebsocket.to(room).emit('leave', socket.id);
+        socket.leave(room);
+      }
+    });
+  
+    socket.on('join', function(name, callback){
+      console.log('join ', name);
+      var socketIds = socketIdsInRoom(name);
+      callback(socketIds);
+      socket.join(name);
+      socket.room = name;
+    });
+  
+    socket.on('exchange', function(data){
+      console.log('exchange: ', data);
+      data.from = socket.id;
+      var to = videoWebsocket.sockets.connected[data.to];
+      // to.emit('exchange', data);
+      socket.to(socket.id).emit(data)
+    });
+  
+  });
