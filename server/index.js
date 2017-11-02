@@ -31,7 +31,7 @@ class RoomGen {
     this.userIds.push(userId);
   }
   isPopulated() {
-    return this.vidRooms.length === srms.length
+    return this.userIds.length === srms.length
   }
 } 
 
@@ -54,11 +54,17 @@ app.get('/*', function (req, res) {
 app.post('/flask', (req, res) => {
   // console.log('FLASK DATA: ', res.req.body);
   const tempRoom = res.req.body;
+
+  // put room instantiation in if (tempRoom.length === #)
   room = new RoomGen(tempRoom)
   console.log ('server room', room)
   // io.sockets.emit('ready', { room, id });
   res.end();
 })
+
+// eventually ..
+  // Put socket events in if (!processing && room)
+
 
 io.on('connection', (socket) => {
   console.log('socket connected');
@@ -66,30 +72,32 @@ io.on('connection', (socket) => {
   // const { roomId } = socket.handshake.query || 'default';
   // socket.join(roomId);
 
-  socket.on('inHolding', userId => {
-    room.forEach(person => {
-      console.log('COMPARING:', person[0], ' AGAINST', userId );
-      if (person[0] === userId) {     //person[0] = userId
-        room.receiveUserId(userId);
-        socket.emit('readyWaiting', room)
+  if (room) {
+    socket.on('inHolding', userId => {
+      room.forEach(person => {
+        console.log('COMPARING:', person[0], ' AGAINST', userId );
+        if (person[0] === userId) {     //person[0] = userId
+          room.receiveUserId(userId);
+          socket.emit('readyWaiting', room)
+        }
+      });
+      if (room.isPopulated()) {
+        room.userIds.forEach(user => {
+          if (user[1][0] === 'm') {     //person[1] = userSex
+            let tempRoom = [];
+            for (let i = 0; i < room.length / 2; i++) {
+              let vidRoomName = user[0] + '-' + i;
+              socket.join(vidRoomName);
+              console.log('roommade for male user', vidRoomName)
+              tempRoom.push(vidRoomName);
+            }
+            room.vidRooms.push(tempRoom);
+          }
+        })
+        console.log('room', room.vidRooms)
+        // for each female
+          // emit a row of vidRooms
       }
     });
-    if (room.isPopulated()) {
-      room.userIds.forEach(user => {
-        if (user[1][0] === 'm') {     //person[1] = userSex
-          let tempRoom = [];
-          for (let i = 0; i < room.length / 2; i++) {
-            let vidRoomName = user[0] + '-' + i;
-            socket.join(vidRoomName);
-            console.log('roommade for male user', vidRoomName)
-            tempRoom.push(vidRoomName);
-          }
-          room.vidRooms.push(tempRoom);
-        }
-      })
-      console.log('room', room.vidRooms)
-      // for each female
-        // emit a row of vidRooms
-    }
-  });
+  }
 });
