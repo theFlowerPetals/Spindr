@@ -41,17 +41,18 @@ def enqueue():
   # return "hi"
   if request.method == 'POST':
     req_data = request.get_json()
-    name = req_data['name']
-    sex = req_data['sex']
-    socialScore = json.loads(req_data['socialScore'])
-    interests = req_data['interests']
-    partnerScore = json.loads(req_data['partnerScore'])
-    partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
-    weighted = req_data['partnerWeightedInterests']
+    print ('req_data', req_data)
+    # name = req_data['name']
+    # sex = req_data['sex']
+    # socialScore = json.loads(req_data['socialScore'])
+    # interests = req_data['interests']
+    # partnerScore = json.loads(req_data['partnerScore'])
+    # partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
+    # weighted = req_data['partnerWeightedInterests']
 
-    user = [sex, socialScore, interests, partnerScore, weighted]
+    # user = [sex, socialScore, interests, partnerScore, weighted]
 
-    queue.append(user)
+    # queue.append(user)
 
     return 'added'
   
@@ -67,7 +68,7 @@ def create_rooms():
     room_made = room_testing.make_room(queue, 4, [])
     print ('queue', queue)
     print ('room made here %s' %room_made)
-    API_ENDPOINT = "http://localhost:3000/flask"
+    API_ENDPOINT = "http://13.57.52.97:3000/flask"
 
     # rooms = [1, 2, 3, 4]
     data = {'room': room_made}
@@ -92,4 +93,4 @@ if __name__ == '__main__':
   print ('hi')
 
   
-  app.run()
+  app.run(host="13.57.39.204")
