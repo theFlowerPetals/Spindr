@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
     });
     if (room.isPopulated()) {
       room.userIds.forEach(user => {
-        if (user[1] === 'm') {     //person[1] = userSex
+        if (user[1][0] === 'm') {     //person[1] = userSex
           let tempRoom = [];
           for (let i = 0; i < room.length / 2; i++) {
             let vidRoomName = user[0] + '-' + i;
