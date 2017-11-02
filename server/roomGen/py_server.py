@@ -5,27 +5,6 @@ import time
 from threading import Thread
 import json
 import requests
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import scoped_session,sessionmaker
-# from zope.sqlalchemy import ZopeTransactionExtension
-
-# #make a connection to DB
-
-# #create a get call to grab all the ready users
-
-#
-# DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-
-# z  = DBSession.query(Book).filter_by(author_id=1)
-
-# def job():
-#     print("I'm working...")
-
-# schedule.every(10).seconds.do(job)
-
-# while True:
-#   schedule.run_pending()
-#   time.sleep(1)
 
 
 
@@ -42,13 +21,13 @@ def enqueue():
   if request.method == 'POST':
     req_data = request.get_json()
     # print ('req_data', req_data)
-    userId = req_data['userId']
-    sex = req_data['sex']
-    socialScore = json.loads(req_data['socialScore'])
+    userId = req_data['id']
+    sex = req_data['sex'][0]
+    socialScore = json.loads(req_data['social_score']) 
     interests = req_data['interests']
-    partnerScore = json.loads(req_data['partnerScore'])
-    partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
-    weighted = req_data['partnerWeightedInterests']
+    partnerScore = json.loads(req_data['match_social_score']) 
+    partnerCumulativeInterest = req_data['match_interests']
+    weighted = req_data['match_weighted_interests'] 
 
     user = [userId, sex, socialScore, interests, partnerScore, weighted]
 
@@ -63,7 +42,7 @@ def enqueue():
 
 def create_rooms():
   # global rooms
-  # print ('waiting')
+  print ('queue', queue)
   while len(queue) >= 4:
     room_made = room_testing.make_room(queue, 4, [])
     # print ('queue', queue)
