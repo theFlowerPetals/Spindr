@@ -69,7 +69,7 @@ def add_person(queue, room, room_size, user):
 
     for queue_i in range(len(queue)):
       other_user = queue[queue_i]
-      if other_user[1] != sex:
+      if other_user[1] != sex[0]:
         potentials_idx.append(queue_i)
         potential = []   #individual person
         #x coord:

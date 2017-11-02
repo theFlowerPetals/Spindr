@@ -40,9 +40,10 @@ app.get('/*', function (req, res) {
 
 //Listen to flask server sending rooms 
 app.post('/flask', (req, res) => {
-  console.log('FLASK DATA: ', res.req.body);
-  const { room } = res.req.body;
-  room = new RoomGen(room)
+  // console.log('FLASK DATA: ', res.req.body);
+  const tempRoom = res.req.body;
+  room = new RoomGen(tempRoom)
+  console.log ('server room', room)
   // io.sockets.emit('ready', { room, id });
   res.end();
 })
