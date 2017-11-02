@@ -44,20 +44,20 @@ def enqueue():
     # print ('req_data', req_data)
     userId = req_data['userId']
     sex = req_data['sex']
-    # socialScore = json.loads(req_data['socialScore'])
-    # interests = req_data['interests']
-    # partnerScore = json.loads(req_data['partnerScore'])
-    # partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
-    # weighted = req_data['partnerWeightedInterests']
+    socialScore = json.loads(req_data['socialScore'])
+    interests = req_data['interests']
+    partnerScore = json.loads(req_data['partnerScore'])
+    partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
+    weighted = req_data['partnerWeightedInterests']
 
-    user = [userId, sex]
+    user = [userId, sex, socialScore, interests, partnerScore, weighted]
 
     queue.append(user)
 
     return 'added'
   
   if request.method == 'GET':
-    return ', '.join(queue[len(queue) - 1])
+    return 'got get'
 
 # @app.route('/giveMeRoom')
 
@@ -93,4 +93,4 @@ if __name__ == '__main__':
   print ('hi')
 
   
-  app.run(host="13.57.39.204")
+  app.run()

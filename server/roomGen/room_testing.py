@@ -63,23 +63,23 @@ def add_person(queue, room, room_size, user):
     return room
   else:
     # print (user)
-    sex = user[0]
+    sex = user[1]
     potentials = []   #all the potentials in the graph
     potentials_idx = []
 
     for queue_i in range(len(queue)):
       other_user = queue[queue_i]
-      if other_user[0] != sex:
+      if other_user[1] != sex:
         potentials_idx.append(queue_i)
         potential = []   #individual person
         #x coord:
-        potential.insert(0, (16 - abs(other_user[3] - user[1])) / 16)
+        potential.insert(0, (16 - abs(other_user[4] - user[2])) / 16)
 
         #y coord:
         interest_score = 0
-        for interest in other_user[2]:
-          if interest in user[4]:
-            interest_score += user[4][interest]
+        for interest in other_user[3]:
+          if interest in user[5]:
+            interest_score += user[5][interest]
         potential.insert(1, interest_score)
 
         #put potential into potentials
