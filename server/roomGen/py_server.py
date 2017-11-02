@@ -41,18 +41,18 @@ def enqueue():
   # return "hi"
   if request.method == 'POST':
     req_data = request.get_json()
-    print ('req_data', req_data)
-    # name = req_data['name']
-    # sex = req_data['sex']
+    # print ('req_data', req_data)
+    userId = req_data['userId']
+    sex = req_data['sex']
     # socialScore = json.loads(req_data['socialScore'])
     # interests = req_data['interests']
     # partnerScore = json.loads(req_data['partnerScore'])
     # partnerCumulativeInterest = req_data['partnerCumulativeInterstNum']
     # weighted = req_data['partnerWeightedInterests']
 
-    # user = [sex, socialScore, interests, partnerScore, weighted]
+    user = [userId, sex]
 
-    # queue.append(user)
+    queue.append(user)
 
     return 'added'
   
@@ -66,8 +66,8 @@ def create_rooms():
   # print ('waiting')
   while len(queue) >= 4:
     room_made = room_testing.make_room(queue, 4, [])
-    print ('queue', queue)
-    print ('room made here %s' %room_made)
+    # print ('queue', queue)
+    # print ('room made here %s' %room_made)
     API_ENDPOINT = "http://13.57.52.97:3000/flask"
 
     # rooms = [1, 2, 3, 4]
@@ -87,7 +87,7 @@ def run_schedule():
     time.sleep(1)
 
 if __name__ == '__main__':
-  schedule.every(10).seconds.do(create_rooms)
+  schedule.every(12).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
