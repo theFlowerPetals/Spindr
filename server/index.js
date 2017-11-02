@@ -124,6 +124,7 @@ websocket.on('connection', (socket) => {
     }
     
     socket.join(sumOfIDs);
+ 
     console.log('JOINED ROOM:', sumOfIDs);
   })
   socket.on('message', (message, room) => {
