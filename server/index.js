@@ -22,6 +22,18 @@ const io = require('socket.io')(server);
 
 const roomList = {};
 
+class RoomGen {
+  constructor (srms) {
+    this.vidRooms = [];
+    this.userIds = [];
+  }
+  receiveUserId(userId) {
+    this.userIds.push(userId);
+  }
+  isPopulated() {
+    return this.vidRooms.length === srms.length
+  }
+} 
 
 server.listen(PORT, () => {
   console.log(`Listening on server port ${PORT}`)
@@ -56,6 +68,7 @@ io.on('connection', (socket) => {
 
   socket.on('inHolding', userId => {
     room.forEach(person => {
+      console.log('COMPARING:', person[0], ' AGAINST', userId );
       if (person[0] === userId) {     //person[0] = userId
         room.receiveUserId(userId);
         socket.emit('readyWaiting', room)
@@ -63,7 +76,7 @@ io.on('connection', (socket) => {
     });
     if (room.isPopulated()) {
       room.userIds.forEach(user => {
-        if (user[1] === 'm') {     //person[1] = userSex
+        if (user[1][0] === 'm') {     //person[1] = userSex
           let tempRoom = [];
           for (let i = 0; i < room.length / 2; i++) {
             let vidRoomName = user[0] + '-' + i;
