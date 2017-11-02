@@ -24,6 +24,7 @@ const roomList = {};
 
 class RoomGen {
   constructor (srms) {
+    this.srms = srms
     this.vidRooms = [];
     this.userIds = [];
   }
@@ -54,9 +55,10 @@ app.get('/*', function (req, res) {
 app.post('/flask', (req, res) => {
   // console.log('FLASK DATA: ', res.req.body);
   const tempRoom = res.req.body;
+  const tempRoomParsed = JSON.parse(tempRoom.room)
 
   // put room instantiation in if (tempRoom.length === #)
-  room = new RoomGen(tempRoom)
+  room = new RoomGen(tempRoomParsed)
   console.log ('server room', room)
   // io.sockets.emit('ready', { room, id });
   res.end();
@@ -72,7 +74,7 @@ io.on('connection', (socket) => {
   // const { roomId } = socket.handshake.query || 'default';
   // socket.join(roomId);
 
-  if (room) {
+  if (room.srms) {
     socket.on('inHolding', userId => {
       room.forEach(person => {
         console.log('COMPARING:', person[0], ' AGAINST', userId );
