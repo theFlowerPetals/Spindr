@@ -50,7 +50,8 @@ def create_rooms():
     API_ENDPOINT = "http://13.57.52.97:3000/flask"
 
     # rooms = [1, 2, 3, 4]
-    data = {'room': room_made}
+    data = {'room': json.dumps(room_made)}
+    print ('json data', data)
     requests.post(url = API_ENDPOINT, data = data)
     # print ('room testing')
     # rooms = rooms_stack
@@ -66,7 +67,7 @@ def run_schedule():
     time.sleep(1)
 
 if __name__ == '__main__':
-  schedule.every(12).seconds.do(create_rooms)
+  schedule.every(5).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   print ('hi')
