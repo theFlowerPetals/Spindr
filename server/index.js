@@ -9,8 +9,8 @@ const app = express();
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const server = http.Server(app);
+const io = require('socket.io')(server)
 require('../db/models/dataModels')
 
 const PORT = 3000;
@@ -25,7 +25,7 @@ class RoomGen {
     this.userIds.push(userId);
   }
   isPopulated() {
-    return this.userIds.length === srms.length
+    return this.userIds.length === this.srms.length
   }
 } 
 
@@ -42,54 +42,51 @@ app.use(morgan('dev'))
 app.use('/api', route)
 app.use(express.static(path.resolve(__dirname, '../client/static')))
 
-//Listen to flask server sending rooms 
 app.post('/flask', (req, res) => {
   const tempRoom = res.req.body;
   const tempRoomParsed = JSON.parse(tempRoom.room)
-
-  // put room instantiation in if (tempRoom.length === #)
-  room = new RoomGen(tempRoomParsed)
-  console.log ('server room', room)
-  // io.sockets.emit('ready', { room, id });
+  room = new RoomGen(tempRoomParsed);
+  io.sockets.emit('roomReady', room)
   res.end();
 })
 
-// eventually ..
-  // Put socket events in if (!processing && room)
-
-
 io.on('connection', (socket) => {
-  console.log('socket connected');
-  // hope there's no scoping issues
-  // const { roomId } = socket.handshake.query || 'default';
-  // socket.join(roomId);
-
-  if (room !== undefined) {
-    socket.on('inHolding', userId => {
-      room.forEach(person => {
-        console.log('COMPARING:', person[0], ' AGAINST', userId );
-        if (person[0] === userId) {     //person[0] = userId
-          room.receiveUserId(userId);
-          socket.emit('readyWaiting', room)
-        }
-      });
-      if (room.isPopulated()) {
-        room.userIds.forEach(user => {
-          if (user[1][0] === 'm') {     //person[1] = userSex
-            let tempRoom = [];
-            for (let i = 0; i < room.length / 2; i++) {
-              let vidRoomName = user[0] + '-' + i;
-              socket.join(vidRoomName);
-              console.log('roommade for male user', vidRoomName)
-              tempRoom.push(vidRoomName);
-            }
-            room.vidRooms.push(tempRoom);
+  socket.on('inHolding', userId => {
+    for (let i = 0; i < room.srms.length; i++) {
+      let user = room.srms[i]
+      if (user[0] == userId) {
+        socket.emit('readyWaiting', room);
+        var grid = [];
+        for (let k = 0; k < room.srms.length / 2; k++) {
+          socket.join(user[0] + '-' + k);
+          let roomRow = [];
+          for (let j = 0; j < room.srms.length; j += 2) {
+            let vidRoomName = room.srms[j][0] + '-' + k;
+            roomRow.push(vidRoomName);
           }
-        })
-        console.log('room', room.vidRooms)
-        // for each female
-          // emit a row of vidRooms
+          grid.push(roomRow);
+        }
       }
-    });
-  }
+    }
+    
+    const makeUniqueRooms = (matrix) => {
+      const unique = [];
+      for (let c = 0; c < matrix.length; c++) {
+        const tempRow = [];
+        for (let r = 0; r < matrix.length; r++) {
+          let col = c + r < matrix.length ? c + r : c + r - matrix.length;
+          tempRow.push(matrix[r][col]);
+        }
+        unique.push(tempRow);
+      }
+      return unique;
+    }
+    
+    let unique = makeUniqueRooms(grid);
+    for (let l = 1; l < room.srms.length; l += 2) {
+      if (room.srms[l][0] == userId) {
+        io.to(socket.id).emit('vidReady', unique[Math.floor(l / 2)])
+      }
+    }
+  });
 });
