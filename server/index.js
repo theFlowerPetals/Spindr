@@ -4,23 +4,16 @@ const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
-require('../db/models/dataModels')
 const route = require('../server/router/routes')
-
-const PORT = 3000;
-
 const app = express();
-
-var fs = require('fs');
-var open = require('open');
-var https = require('https');
-var http = require('http');
-
+const fs = require('fs');
+const https = require('https');
+const http = require('http');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+require('../db/models/dataModels')
 
-
-const roomList = {};
+const PORT = 3000;
 
 class RoomGen {
   constructor (srms) {
@@ -40,6 +33,7 @@ server.listen(PORT, () => {
   console.log(`Listening on server port ${PORT}`)
 });
 
+// setting global room variable
 let room;
 
 app.use(parser.json())
@@ -47,13 +41,9 @@ app.use(parser.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use('/api', route)
 app.use(express.static(path.resolve(__dirname, '../client/static')))
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/static', 'index.html'));
-})
 
 //Listen to flask server sending rooms 
 app.post('/flask', (req, res) => {
-  // console.log('FLASK DATA: ', res.req.body);
   const tempRoom = res.req.body;
   const tempRoomParsed = JSON.parse(tempRoom.room)
 
@@ -74,7 +64,7 @@ io.on('connection', (socket) => {
   // const { roomId } = socket.handshake.query || 'default';
   // socket.join(roomId);
 
-  if (room.srms) {
+  if (room !== undefined) {
     socket.on('inHolding', userId => {
       room.forEach(person => {
         console.log('COMPARING:', person[0], ' AGAINST', userId );
