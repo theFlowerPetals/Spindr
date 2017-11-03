@@ -1,10 +1,10 @@
 'use strict';
 const express = require('express');
+const http = require('http');
 const parser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 const db = require('../db/db');
-const route = require('../server/router/routes')
 const app = express();
 const fs = require('fs');
 const https = require('https');
@@ -12,6 +12,9 @@ const http = require('http');
 const server = http.Server(app);
 const io = require('socket.io')(server)
 require('../db/models/dataModels')
+// require('../fakeData/generateData');
+const route = require('../server/router/routes');
+const socketio = require('socket.io');
 
 const PORT = 3000;
 
@@ -35,6 +38,7 @@ server.listen(PORT, () => {
 
 // setting global room variable
 let room;
+const websocket = socketio(server);
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
@@ -88,5 +92,39 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('vidReady', unique[Math.floor(l / 2)])
       }
     }
+  });
+});
+// app.listen(PORT, () => {
+//   console.log(`Listening on port ${PORT}`)
+// })
+
+// server.listen(socketPort, () => {
+//   console.log(`Listening on port (socket) ${socketPort}`)
+// })
+
+// app.get('/', function(req, res){
+//   res.sendFile(__dirname + '/index.html');
+//   });
+
+
+const rooms = new Set();
+
+websocket.on('connection', (socket) => {
+  socket.on('joinRoom', (id1, id2) => {
+    // Get sum of IDs
+    let sumOfIDs = id1 + id2;
+    // Push sum to rooms
+    rooms.add(sumOfIDs);
+
+    // Before sending client to a room
+      // Check if sum is in room
+    if(rooms.has(sumOfIDs)) {
+      socket.emit('roomExists', true);
+    }
+    
+    socket.join(sumOfIDs);
+  })
+  socket.on('message', (message, room) => {
+    socket.to(room).emit('message', [message.text]);
   });
 });
