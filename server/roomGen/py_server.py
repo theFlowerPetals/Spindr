@@ -45,8 +45,7 @@ def create_rooms():
   print ('queue', queue)
   while len(queue) >= 4:
     room_made = room_testing.make_room(queue, 4, [])
-    # print ('queue', queue)
-    # print ('room made here %s' %room_made)
+
     API_ENDPOINT = "http://13.57.52.97:3000/flask"
 
     # rooms = [1, 2, 3, 4]
@@ -72,5 +71,4 @@ if __name__ == '__main__':
   t.start()
   print ('hi')
 
-  
-  app.run()
+  app.run(host="0.0.0.0")
