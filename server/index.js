@@ -69,20 +69,36 @@ io.on('connection', (socket) => {
       let user = room.srms[i]
       if (user[0] == userId) {
         socket.emit('readyWaiting', room);
-        if (user[1] === 'm') {
-          let tempRoom = [];
-          for (let j = 0; j < room.srms.length / 2; j++) {
-            let vidRoomName = user[0] + '-' + j;
-            socket.join(vidRoomName);
-            console.log('roommade for male user', vidRoomName)
-            tempRoom.push(vidRoomName);
+        var grid = [];
+        for (let k = 0; k < room.srms.length / 2; k++) {
+          socket.join(user[0] + '-' + k);
+          let roomRow = [];
+          for (let j = 0; j < room.srms.length; j += 2) {
+            let vidRoomName = room.srms[j][0] + '-' + k;
+            roomRow.push(vidRoomName);
           }
-          room.vidRooms.push(tempRoom);
+          grid.push(roomRow);
         }
       }
     }
-    console.log('vidRooms', room.vidRooms)
-      // for each female
+    
+    const makeUniqueRooms = (matrix) => {
+      const unique = [];
+      for (let c = 0; c < matrix.length; c++) {
+        const tempRow = [];
+        for (let r = 0; r < matrix.length; r++) {
+          let col = c + r < matrix.length ? c + r : c + r - matrix.length;
+          tempRow.push(matrix[r][col]);
+        }
+        unique.push(tempRow);
+      }
+      return unique;
+    }
+
+    console.log('vidRooms', grid)
+    console.log(makeUniqueRooms(grid));
+    
+    // for each female
         // emit a row of vidRooms
   });
 });
