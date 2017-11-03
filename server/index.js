@@ -8,7 +8,6 @@ require('../db/models/dataModels');
 // require('../fakeData/generateData');
 const route = require('../server/router/routes');
 const socketio = require('socket.io');
-// const chatCtrl = require('./controllers/chatCtrl');
 
 const PORT = 3000;
 
