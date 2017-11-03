@@ -51,18 +51,11 @@ app.post('/flask', (req, res) => {
   room = new RoomGen(tempRoomParsed);
   io.sockets.emit('roomReady', room)
   console.log ('server room', room)
-  // io.sockets.emit('ready', { room, id });
   res.end();
 })
 
 io.on('connection', (socket) => {
   console.log('socket connected');
-  //if we have a room
-    //emit roomMade
-
-  // hope there's no scoping issues
-  // const { roomId } = socket.handshake.query || 'default';
-  // socket.join(roomId);
 
   socket.on('inHolding', userId => {
     for (let i = 0; i < room.srms.length; i++) {
@@ -105,10 +98,5 @@ io.on('connection', (socket) => {
     console.log('vidRooms', grid)
     console.log('unique rooms in server', makeUniqueRooms(grid));
     
-    // for each female
-        // emit a row of vidRooms
   });
 });
-
-// eventually ..
-  // Put socket events in if (!processing && room)
