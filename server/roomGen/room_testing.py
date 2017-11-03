@@ -36,17 +36,10 @@ from sklearn.cluster import KMeans
 # rooms = []
 
 def make_room(queue, room_size, rooms):
-  # print (queue)
-  # print (rooms)
-  # pick a random person from queue
   random_queue_idx = random.choice(range(len(queue)))
   room = []   # do we need to persist the room for anything?
   room.append(queue[random_queue_idx])
   del queue[random_queue_idx]
-  
-  # put people in the room
-
-  # return add_person(queue, room, room_size, room[len(room) - 1])
 
   room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
   print ('room made')
@@ -55,14 +48,11 @@ def make_room(queue, room_size, rooms):
 
   return room_made
 
-#for one male:
+#for one person:
 def add_person(queue, room, room_size, user):
-  # print ('room inside add_person')
-  # print (room)
   if len(room) == room_size:
     return room
   else:
-    # print (user)
     sex = user[1]
     potentials = []   #all the potentials in the graph
     potentials_idx = []
@@ -72,9 +62,9 @@ def add_person(queue, room, room_size, user):
       if other_user[1] != sex[0]:
         potentials_idx.append(queue_i)
         potential = []   #individual person
+       
         #x coord:
         potential.insert(0, (16 - abs(other_user[4] - user[2])) / 16)
-
         #y coord:
         interest_score = 0
         for interest in other_user[3]:
@@ -84,11 +74,9 @@ def add_person(queue, room, room_size, user):
 
         #put potential into potentials
         potentials.append(potential)
-        #print (potential)
       
     if len(potentials) > 0:
       X = np.array(potentials)
-      # print(potentials)
 
       #define num of clusters here later
       if len(potentials) >= 4:

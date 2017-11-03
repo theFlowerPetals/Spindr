@@ -18,14 +18,14 @@ def enqueue():
     req_data = request.get_json()
     userId = req_data['id']
     sex = req_data['sex'][0]
-    # socialScore = json.loads(req_data['social_score']) 
-    # interests = req_data['interests']
-    # partnerScore = json.loads(req_data['match_social_score']) 
-    # partnerCumulativeInterest = req_data['match_interests']
-    # weighted = req_data['match_weighted_interests'] 
-    # user = [userId, sex, socialScore, interests, partnerScore, weighted]
+    socialScore = json.loads(req_data['social_score']) 
+    interests = req_data['interests']
+    partnerScore = json.loads(req_data['match_social_score']) 
+    partnerCumulativeInterest = req_data['match_interests']
+    weighted = req_data['match_weighted_interests'] 
+    user = [userId, sex, socialScore, interests, partnerScore, weighted]
 
-    user = [userId, sex]
+    # user = [userId, sex]
     queue.append(user)
 
     return 'added'
@@ -38,9 +38,14 @@ def create_rooms():
   print ('queue', queue)
   while len(queue) >= 4:
     room_made = room_testing.make_room(queue, 4, [])
-
+    room_formatted = []
+    for i in range(len(room_made)):
+      temp = []
+      temp.append(room_made[i][0])
+      temp.append(room_made[i][1])
+      room_formatted.append(temp)
     API_ENDPOINT = "http://13.57.52.97:3000/flask"
-    data = {'room': json.dumps(room_made)}
+    data = {'room': json.dumps(room_formatted)}
     requests.post(url = API_ENDPOINT, data = data)
 
 def run_schedule():
