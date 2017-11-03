@@ -65,31 +65,27 @@ io.on('connection', (socket) => {
   // socket.join(roomId);
 
   socket.on('inHolding', userId => {
-    room.srms.forEach(person => {
-      console.log('COMPARING:', person[0], ' AGAINST', userId );
-      if (person[0] === userId) {     //person[0] = userId
-        room.receiveUserId(userId);
-        socket.emit('readyWaiting', room)
-      }
-    });
-    if (room.isPopulated()) {
-      room.userIds.forEach(user => {
-        if (user[1][0] === 'm') {     //person[1] = userSex
+    for (let i = 0; i < room.srms.length; i++) {
+      let user = room.srms[i]
+      if (user[0] == userId) {
+        socket.emit('readyWaiting', room);
+        if (user[1] === 'm') {
           let tempRoom = [];
-          for (let i = 0; i < room.length / 2; i++) {
-            let vidRoomName = user[0] + '-' + i;
+          for (let j = 0; j < room.srms.length / 2; j++) {
+            let vidRoomName = user[0] + '-' + j;
             socket.join(vidRoomName);
             console.log('roommade for male user', vidRoomName)
             tempRoom.push(vidRoomName);
           }
           room.vidRooms.push(tempRoom);
         }
-      })
-      console.log('room', room.vidRooms)
+      }
+    }
+    console.log('vidRooms', room.vidRooms)
       // for each female
         // emit a row of vidRooms
-    }
   });
-})
+});
+
 // eventually ..
   // Put socket events in if (!processing && room)
