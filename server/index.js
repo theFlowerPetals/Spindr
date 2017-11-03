@@ -38,6 +38,7 @@ server.listen(PORT, () => {
 
 // setting global room variable
 let room;
+const websocket = socketio(server);
 
 app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
