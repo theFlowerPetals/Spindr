@@ -9,14 +9,13 @@ from sklearn.cluster import KMeans
 
 def make_room(queue, room_size, rooms):
   random_queue_idx = random.choice(range(len(queue)))
-  room = []   # do we need to persist the room for anything?
+  room = []
   room.append(queue[random_queue_idx])
   del queue[random_queue_idx]
 
   room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
   print ('room made')
   print (room_made)
-  # rooms.append(room_made)
 
   return room_made
 
@@ -50,7 +49,6 @@ def add_person(queue, room, room_size, user):
     if len(potentials) > 0:
       X = np.array(potentials)
 
-      #define num of clusters here later
       if len(potentials) >= 4:
         cluster_num = 4
       else:
@@ -75,11 +73,8 @@ def add_person(queue, room, room_size, user):
         if labels[n] == best_centroid_idx:
           idx_of_users_in_cluster.append(n)
 
-      # print (idx_of_user_in_cluster)
       random_idx = random.choice(idx_of_users_in_cluster)
       next_user_idx = potentials_idx[random_idx]
-
-      # print (queue[next_user_idx])
 
       # add the user to the room
       room.append(queue[next_user_idx])

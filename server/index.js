@@ -42,12 +42,10 @@ app.use(morgan('dev'))
 app.use('/api', route)
 app.use(express.static(path.resolve(__dirname, '../client/static')))
 
-//Listen to flask server sending rooms 
 app.post('/flask', (req, res) => {
   const tempRoom = res.req.body;
   const tempRoomParsed = JSON.parse(tempRoom.room)
 
-  // put room instantiation in if (tempRoom.length === #)
   room = new RoomGen(tempRoomParsed);
   io.sockets.emit('roomReady', room)
   console.log ('server room', room)

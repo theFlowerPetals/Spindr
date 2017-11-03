@@ -12,7 +12,6 @@ queue = []
 rooms = []
 
 @app.route('/', methods = ['GET', 'POST'])
-# Should be getting a get request with "ready" users in body
 def enqueue():
   if request.method == 'POST':
     req_data = request.get_json()
@@ -25,7 +24,6 @@ def enqueue():
     weighted = req_data['match_weighted_interests'] 
     user = [userId, sex, socialScore, interests, partnerScore, weighted]
 
-    # user = [userId, sex]
     queue.append(user)
 
     return 'added'
@@ -34,10 +32,8 @@ def enqueue():
     return 'got get'
 
 def create_rooms():
-  # global rooms
-  print ('queue', queue)
-  while len(queue) >= 6:
-    room_made = room_testing.make_room(queue, 6, [])
+  while len(queue) >= 4:
+    room_made = room_testing.make_room(queue, 4, [])
     room_formatted = []
     for i in range(len(room_made)):
       temp = []
