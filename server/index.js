@@ -94,9 +94,16 @@ io.on('connection', (socket) => {
       }
       return unique;
     }
+    
+    let unique = makeUniqueRooms(grid);
+    for (let l = 1; l < room.srms.length; l += 2) {
+      if (room.srms[l][0] == userId) {
+        io.to(socket.id).emit('vidReady', unique[Math.floor(l / 2)])
+      }
+    }
 
     console.log('vidRooms', grid)
-    console.log(makeUniqueRooms(grid));
+    console.log('unique rooms in server', makeUniqueRooms(grid));
     
     // for each female
         // emit a row of vidRooms
