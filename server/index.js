@@ -45,16 +45,12 @@ app.use(express.static(path.resolve(__dirname, '../client/static')))
 app.post('/flask', (req, res) => {
   const tempRoom = res.req.body;
   const tempRoomParsed = JSON.parse(tempRoom.room)
-
   room = new RoomGen(tempRoomParsed);
   io.sockets.emit('roomReady', room)
-  console.log ('server room', room)
   res.end();
 })
 
 io.on('connection', (socket) => {
-  console.log('socket connected');
-
   socket.on('inHolding', userId => {
     for (let i = 0; i < room.srms.length; i++) {
       let user = room.srms[i]
@@ -92,9 +88,5 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('vidReady', unique[Math.floor(l / 2)])
       }
     }
-
-    console.log('vidRooms', grid)
-    console.log('unique rooms in server', makeUniqueRooms(grid));
-    
   });
 });

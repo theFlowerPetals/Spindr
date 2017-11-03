@@ -12,11 +12,8 @@ def make_room(queue, room_size, rooms):
   room = []
   room.append(queue[random_queue_idx])
   del queue[random_queue_idx]
-
   room_made = (add_person(queue, room, room_size, room[len(room) - 1]))
-  print ('room made')
-  print (room_made)
-
+  
   return room_made
 
 #for one person:

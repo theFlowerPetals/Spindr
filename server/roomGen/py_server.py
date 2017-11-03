@@ -50,7 +50,7 @@ def run_schedule():
     time.sleep(1)
 
 if __name__ == '__main__':
-  schedule.every(5).seconds.do(create_rooms)
+  schedule.every(4).seconds.do(create_rooms)
   t = Thread(target=run_schedule)
   t.start()
   app.run(host="0.0.0.0")
