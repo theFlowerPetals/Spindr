@@ -36,8 +36,8 @@ def enqueue():
 def create_rooms():
   # global rooms
   print ('queue', queue)
-  while len(queue) >= 4:
-    room_made = room_testing.make_room(queue, 4, [])
+  while len(queue) >= 6:
+    room_made = room_testing.make_room(queue, 6, [])
     room_formatted = []
     for i in range(len(room_made)):
       temp = []
